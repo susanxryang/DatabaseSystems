@@ -1,0 +1,7 @@
+USE geo;
+SELECT y.name AS country_name, y.`-car_code` AS country_code, m AS mountains
+     FROM world x, x.mondial.country y
+     LET m = (SELECT z.name AS mountain, z.height AS height
+              FROM world x2, x2.mondial.mountain z, split(z.`-country`, ' ') r
+              WHERE y.`-car_code` = r)
+ORDER BY array_count(m) DESC;

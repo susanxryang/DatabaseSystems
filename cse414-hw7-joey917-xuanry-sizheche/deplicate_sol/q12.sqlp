@@ -1,0 +1,20 @@
+USE geoindex;
+
+WITH MTSEA AS 
+(SELECT TS.country_code, TS.sea, TM.mountain
+ FROM(SELECT l AS country_code, s.`-id` AS sea 
+	FROM geoindex.sea s, split(s.`-country`," ") l
+ ) AS TS
+JOIN
+     (SELECT l AS country_code, m.`-id` AS mountain 
+	FROM geoindex.mountain m, split(m.`-country`," ") l
+ ) AS TM
+ON TS.country_code = TM.country_code
+)
+
+SELECT DISTINCT c1.name AS first_country, c2.name AS second_country, T1.sea, T1.mountain
+FROM MTSEA AS T1, MTSEA AS T2, geoindex.country c1, geoindex.country c2 
+WHERE T1.country_code != T2.country_code AND T1.country_code < T2.country_code AND T1.sea = T2.sea AND T1.mountain = T2.mountain
+AND c1.`-car_code` = T1.country_code AND c2.`-car_code` = T2.country_code;
+
+/* runtime: 0.33 sec */

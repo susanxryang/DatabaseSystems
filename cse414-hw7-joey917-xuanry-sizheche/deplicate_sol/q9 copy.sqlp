@@ -1,0 +1,12 @@
+USE geo;
+
+SELECT TS.country_code, TS.sea, TM.mountain
+ FROM(SELECT l AS country_code, s.`-id` AS sea 
+	FROM geo.world x, x.mondial.sea s, split(s.`-country`," ") l
+ ) AS TS
+JOIN
+     (SELECT l AS country_code, m.`-id` AS mountain 
+	FROM geo.world x, x.mondial.mountain m, split(m.`-country`," ") l
+ ) AS TM
+ON TS.country_code = TM.country_code;
+

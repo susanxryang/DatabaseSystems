@@ -1,0 +1,23 @@
+I ran this query to get the result:
+
+with fromseattle as(
+SELECT * FROM Flights F WHERE F.origin_city = "Seattle WA"
+),
+toTF as (
+SELECT FS.origin_city as c1, FS.dest_city as c2, F.dest_city as c3, (F.distance + FS.distance) as miles FROM Flights F, fromseattle FS WHERE F.dest_city = "Twin Falls ID" AND F.origin_city = FS.dest_city ORDER BY miles ASC
+)
+SELECT c1, c2, c3, miles FROM toTF LIMIT 1;
+
+This query makes a temporary table with all the flights from Seattle, and a temporary table with all the flights
+that arrive in Twin Falls ID and depart from destination city from the first temporary table, therefore
+finding a connecting flight from Seattle to Twin Falls ID, as there are no direct flights in this table.
+
+Upon further inspection and querying, I found that the only city that links Seattle to Twin Falls is Salt Lake City, Utah.
+In the toTF table, I select the total distance of the flight from Seattle to Salt Lake City, and the flight from
+Salt Lake City to Twin Falls and order by the total miles. I then select the first result from that temporary table,
+and see that this path minimizes the miles flown:
+
+Seattle WA -> Salt Lake City UT -> Twin Falls ID. Total miles: 864
+
+All of this assumes that the dates of flights don't matter, such as in the case where a flight from Seattle to Salt Lake City takes place
+after a flight from Salt Lake City to Twin Falls.

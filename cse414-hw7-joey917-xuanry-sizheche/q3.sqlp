@@ -1,0 +1,4 @@
+WITH religions AS (SELECT r.`#text` as name
+FROM geo.world x, x.mondial.country c, 
+CASE WHEN is_array(c.religions) THEN c.religions ELSE [c.religions] END r)
+SELECT r.name as religion, COUNT(*) as num_countries FROM religions r GROUP BY r.name;

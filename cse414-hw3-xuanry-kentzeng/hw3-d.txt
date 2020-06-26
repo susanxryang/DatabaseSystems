@@ -1,0 +1,15 @@
+Susan Yang
+Kent Zeng
+CSE 414
+Homework 3 Part D
+
+One of the advantages of a DBMS service in a public cloud is that you don't have to worry about your database
+being lost. Teams and individuals can also get a better computing ability with a paid cloud service. Personal
+computers also may not have the ability to deal with the large amount of data that is stored on the cloud and
+thus by using the public cloud services, teams and individuals can solve the issue of a lack of computing ability
+by utilizing the powerful computing ability of DBMS services in a public cloud.
+
+A disadvantage is that DBMS services in a public cloud, such as Microsoft Azure, cost money and personal projects
+would not be feasible to complete on a DBMS service in a public cloud unless one has sufficient monetary funds to do so.
+Another disadvantage of a public cloud service is that the efficiency of database actions depend on a large
+part to the internet and connectivity of an individual's personal computer. 

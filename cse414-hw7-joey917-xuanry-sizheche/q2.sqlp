@@ -1,0 +1,6 @@
+SELECT c.name as country,
+(CASE WHEN is_array(c.religions) THEN 
+ARRAY_COUNT(c.religions) ELSE 0 END) as num_religions,
+c.population
+FROM geo.world x, x.mondial.country c
+ORDER BY country;

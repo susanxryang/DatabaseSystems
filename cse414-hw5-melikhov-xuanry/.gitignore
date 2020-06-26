@@ -1,0 +1,7 @@
+dbconn.properties
+target/
+main.iml
+test.iml
+.idea/
+*.DS_Store
+.DS_Store

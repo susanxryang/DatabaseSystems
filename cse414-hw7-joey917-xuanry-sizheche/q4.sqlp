@@ -1,0 +1,7 @@
+WITH groups AS (SELECT e.`#text` as name, float(e.`-percentage`) * float(c.population) / 100.0 as numpeople  
+FROM geo.world x, x.mondial.country c, 
+CASE 
+WHEN c.ethnicgroups is missing THEN []
+WHEN is_array(c.ethnicgroups) THEN c.ethnicgroups 
+ELSE [c.ethnicgroups] END e)
+SELECT g.name, SUM(numpeople) as population, COUNT(*) as num_countries FROM groups g GROUP BY g.name;

@@ -1,0 +1,8 @@
+USE geo;
+SELECT y.name AS country_name, y.`-car_code` AS country_code, y.`-area` AS area
+     FROM world x, x.mondial.country y
+     LET m = (SELECT z.name AS sea
+              FROM world x2, x2.mondial.sea z, split(z.`-country`, ' ') r
+              WHERE y.`-car_code` = r)
+WHERE array_count(m) = 0
+ORDER BY float(area) DESC;

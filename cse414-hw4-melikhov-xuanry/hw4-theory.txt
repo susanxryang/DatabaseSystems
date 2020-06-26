@@ -1,0 +1,19 @@
+1. All subsets of {A,B,C,D} are closed.
+A -> A
+B -> B
+C -> C
+D -> D
+There is no functional dependencies other than the trivial one. The subsets of {A,B,C,D}
+are closed, thus the subsets cannot have nontrivial functional dependencies.
+
+2. The only closed subsets of {A,B,C,D} are {} and {A,B,C,D}.
+A -> B
+B -> C
+C -> D
+D -> A
+
+3. The only closed subsets of {A,B,C,D} are {}, {B,C}, and {A,B,C,D}.
+A -> D
+B -> C
+C -> B
+D -> BC

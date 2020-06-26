@@ -1,0 +1,16 @@
+To get the out degrees of cities put into bins, I ran this query:
+
+SELECT F.origin_city, (COUNT(*) / 100) * 100 as bin FROM Flights F GROUP BY F.origin_city;
+
+This selected the city and the number of flights departing from it. I divided the count by 100 and then mulitplied by 100
+to take advantage of integer division to split the counts into bins of 100, so any city with less than 100 flights would have
+"bin" be 0, any city with more than 100 but less than 200 would have its bin be 100, etc.
+
+From this query, I created a temporary table and ran this query:
+
+with bins as 
+(SELECT F.origin_city, (COUNT(*) / 100) * 100 as bin FROM Flights F GROUP BY F.origin_city)
+SELECT b.bin, COUNT(*) as num FROM bins b GROUP BY b.bin;
+
+This grouped by the bin and selected the number of cities that lie in that bin.
+I outputted the result of the query to a CSV file and plotted it on https://scatterplot.online/

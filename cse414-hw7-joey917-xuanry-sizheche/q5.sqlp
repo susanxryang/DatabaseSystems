@@ -1,0 +1,4 @@
+with c_codes as (SELECT m.name, m.height, split(m.`-country`, " ") as countries FROM geo.world x, x.mondial.mountain m)
+SELECT DISTINCT c_codes.name as mountain, c_codes.altitude as height, c.name as country_name, c.`-car_code` as country_code
+FROM geo.world x, x.mondial.country c, x.mondial.mountain m, c_codes UNNEST c_codes.countries as code
+WHERE c.`-car_code` = code;

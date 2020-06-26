@@ -1,0 +1,22 @@
+I write the sql to with 2 "WITH" statement. One with statement I uses to compute the number of 
+outcoming for each city and the other with statement is used to count the number of incoming flights
+to each city. Then I join these to temporary relation together base on dest_city = origin_city,
+and compute the influx by number of incoming flights minus outcoming flights. Then I sort them asc and
+get the smallest one and then sort by desc to get the biggest one.
+Here is the explicit sql query I wrote for finding that.
+
+WITH DPT AS (SELECT F1.origin_city, COUNT(*) cnt1
+             FROM Flights F1
+             GROUP BY F1.origin_city),
+ARRV AS (SELECT F2.dest_city, COUNT(*) cnt2
+         FROM Flights F2
+         GROUP BY F2.dest_city),
+FluxList AS (SELECT D.origin_city, A.dest_city, ISNULL(A.cnt2, 0) - ISNULL(D.cnt1, 0) as influx
+             FROM DPT D FULL OUTER JOIN ARRV A
+             ON D.origin_city = A.dest_city),
+MaxMin AS (SELECT MAX(FL.influx) maximum, MIN(FL.influx) minimum
+           FROM FluxList FL)
+SELECT FL1.origin_city, FL1.dest_city, FL1.influx
+FROM FluxList FL1, MaxMin M
+WHERE FL1.influx = M.maximum
+OR FL1.influx = M.minimum;

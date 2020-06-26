@@ -1,0 +1,6 @@
+SELECT c2.name as city
+FROM geo.world x, x.mondial.country c, c.province p,
+CASE  WHEN is_array(p.city) THEN p.city
+                  ELSE [p.city] END c2
+WHERE c.name = "Peru"
+ORDER BY city;

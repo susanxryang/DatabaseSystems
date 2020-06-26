@@ -1,0 +1,29 @@
+SELECT TCountry.first_country, TCountry.second_country, s AS seas, m AS mountains
+FROM(
+SELECT DISTINCT T1.country_code AS first_country, T2.country_code AS second_country
+FROM
+(SELECT TS.country_code, TS.sea, TM.mountain
+ FROM(SELECT l AS country_code, s.`-id` AS sea FROM geoindex.sea s, split(s.`-country`," ") l) AS TS
+JOIN
+     (SELECT l AS country_code, m.`-id` AS mountain FROM geoindex.mountain m, split(m.`-country`," ") l) AS TM
+ON TS.country_code = TM.country_code) AS T1,
+(SELECT TS.country_code, TS.sea, TM.mountain
+ FROM(SELECT l AS country_code, s.`-id` AS sea FROM geoindex.sea s, split(s.`-country`," ") l) AS TS
+JOIN
+     (SELECT l AS country_code, m.`-id` AS mountain FROM geoindex.mountain m, split(m.`-country`," ") l) AS TM
+ON TS.country_code = TM.country_code) AS T2
+WHERE T1.country_code != T2.country_code AND T1.country_code < T2.country_code AND T1.sea = T2.sea AND T1.mountain = T2.mountain) TCountry
+LET s = (SELECT TSA.sea FROM
+(SELECT TS1.country_code AS first_country, TS2.country_code AS second_country, TS1.sea
+FROM
+(SELECT l AS country_code, s.`-id` AS sea FROM geoindex.sea s, split(s.`-country`," ") l) AS TS1,
+(SELECT l AS country_code, s.`-id` AS sea FROM geoindex.sea s, split(s.`-country`," ") l) AS TS2
+WHERE TS1.country_code != TS2.country_code AND TS1.country_code < TS2.country_code AND TS1.sea = TS2.sea) AS TSA
+WHERE TCountry.first_country = TSA.first_country AND TCountry.second_country = TSA.second_country),
+m = (SELECT TMA.mountain FROM
+(SELECT TM1.country_code AS first_country, TM2.country_code AS second_country, TM1.mountain
+FROM
+(SELECT l AS country_code, m.`-id` AS mountain FROM geoindex.mountain m, split(m.`-country`," ") l) AS TM1,
+(SELECT l AS country_code, m.`-id` AS mountain FROM geoindex.mountain m, split(m.`-country`," ") l) AS TM2
+WHERE TM1.country_code != TM2.country_code AND TM1.country_code < TM2.country_code AND TM1.mountain = TM2.mountain) AS TMA
+WHERE TCountry.first_country = TMA.first_country AND TCountry.second_country = TMA.second_country);

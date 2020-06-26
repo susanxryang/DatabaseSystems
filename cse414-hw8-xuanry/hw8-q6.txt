@@ -1,0 +1,19 @@
+I ran this query to get results:
+DROP TABLE PRIZE
+CREATE TABLE Prize(id int, firstname TEXT, surname TEXT, born TEXT, died TEXT, bornCountry TEXT, bornCountryCode TEXT,
+					bornCity TEXT, diedCountry TEXT, diedCountryCode TEXT, diedCity TEXT, gender TEXT, year int, category TEXT,
+					overallMotivation TEXT, share int, 	motivation TEXT, name TEXT, city TEXT, country TEXT);
+.mode csv
+.import laureate.csv Prize
+with allGendersCounts as(
+SELECT COUNT(*) as count, P.category as category FROM Prize P WHERE P.gender != "org" GROUP BY category
+),
+femaleCounts as (
+SELECT COUNT(*) as count, P.category as category FROM Prize P WHERE P.gender = "female" GROUP BY category
+)
+SELECT F.category as category, CAST(ROUND((F.count / (G.count * 1.0)) * 100.0, 0) AS INT) as percentFemale FROM femaleCounts F, allGendersCounts G WHERE F.category = G.category;
+
+I first downloaded the Laureate table CSV file so I could run my own queries on it. From there, I created a table and imported
+the data into it. For my query, I had a temporary table that had the count of all winners in each category, and a temporary
+table that the count of all female winners in each category. I selected the number of female winners divided by the number
+of total winners for each category, multiplied it by 100, rounded it, and cast it to an int to get the nearest whole number percent.
